@@ -1,1 +1,6 @@
-<h1>you shouldn't be here</h1>
+{% extends "blog/base.html" %}
+{% block content %}
+  <div class="content-section">
+    <a class="btn btn-primary btn-lg btn-block" href="{{authorization_url}}">Sign in with Ion</a>
+  </div>
+{% endblock content %}
