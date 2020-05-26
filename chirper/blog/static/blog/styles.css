@@ -3,11 +3,16 @@
     src: url(futura.ttf);
 }
 
+@font-face {
+  font-family: 'Segoe UI';
+  src: url('Segoe UI.ttf');
+}
+
 body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
-  font-family: Futura;
+  font-family: 'Segoe UI';
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -21,7 +26,7 @@ ul {
 .bg-steel {
   background: #5f788a;
   background: linear-gradient(to right, #ec008c, #fc6767);
-  border-bottom: 3px #111 solid;
+  /* border-bottom: 3px #111 solid; */
 }
 
 .site-header .navbar-nav .nav-link {
@@ -89,4 +94,9 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.nounderline {
+  text-decoration: none !important;
+  color: black !important;
 }

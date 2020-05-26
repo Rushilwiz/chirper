@@ -1,6 +1,9 @@
 {% extends "blog/base.html" %}
 {% block content %}
-  <div class="content-section">
-    <a class="btn btn-primary btn-lg btn-block" href="{{authorization_url}}">Sign in with Ion</a>
-  </div>
+<div class="content-section">
+    <a href="{{ authorization_url }}" title="Ion" class="border border-dark p-3 btn btn-block btn-lg mx-auto">
+      <img src="https://ion.tjhsst.edu/static/img/favicon.png">
+      Sign in with Ion
+    </a>
+</div>
 {% endblock content %}

@@ -35,7 +35,13 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
+            {% if user.is_authenticated %}
+              <a class="nav-item nav-link" href="{% url 'post-create' %}">New Chirp</a>
+              <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
               <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+            {% endif %}
             </div>
           </div>
         </div>
@@ -56,6 +62,19 @@
             {% endfor %}
           {% endif %}
           {% block content %}{% endblock %}
+        </div>
+        <div class="col-md-4">
+          <div class="content-section">
+            <h3>Trending</h3>
+              <ul class="list-group">
+                <li class="list-group-item"><a href="https://www.djangoproject.com/">#Django</a></li>
+                <li class="list-group-item"><a href="https://tjctf.org">#TJCTF</a></li>
+                <li class="list-group-item"><a href="https://sysadmins.tjhsst.edu/understudy/">#Understudy</a></li>
+                <li class="list-group-item"><a href="https://dadjokegenerator.com/">#DadJokes</a></li>
+              </ul>
+            </p>
+          </div>
+        </div>
         </div>
       </div>
     </main>

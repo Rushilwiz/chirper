@@ -1,19 +1,28 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
-from django.contrib import messages
-from requests_oauthlib import OAuth2Session
 import json
 import requests
+
+from django.shortcuts import render, redirect
+
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+from requests_oauthlib import OAuth2Session
+
+from django.contrib import messages
+
+from .forms import UserUpdateForm, ProfileUpdateForm
+
 
 # Create your views here.
 
 client_id = r'6p7HJlFCD8cnBNBEdgMsdULS5ph0jserw1xvWfxX'
 client_secret = r'E1e79KebxzAp0LBEtxcUg32b0qFP9Ap9Dxqkac6Qhci5AwXFhSfrbe7MtmGJUh6DDgxivJpGgFYNQgusfvoSraDAnsq3NnEET5DmxgfBBvvuYc2bwDq6KpeKIDQqFtwz'
-redirect_uri = 'http://localhost:8000/login/callback/'
+redirect_uri = 'http://localhost:8000/callback/'
 token_url = 'https://ion.tjhsst.edu/oauth/authorize/'
-scope=["read","write"]
+scope=["read"]
 
 authorized_users=["2023rumareti", "Your ION_USERNAME"]
 #                 Hey that's me
@@ -59,11 +68,40 @@ def callback (request):
                         user = User.objects.create_user(username=username, email=email, password=username, first_name=first_name, last_name=last_name)
                         user.save()
                         auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                        messages.success(request, f"Welcome to Chirper, {first_name}, we hope you like your stay!")
-                    return redirect('/')
+                        messages.success(request, f"Welcome to Chirper, {first_name}, we hope you enjoy your stay!")
+                    return redirect('profile')
                 else:
                     messages.error(request, "Sorry, you're not an authorized Ion user!", extra_tags='danger')
-                    return redirect('/')
+                    return redirect('blog-home')
 
         messages.warning(request, "Invalid Callback Response")
-        return redirect('/')
+        return redirect('blog-home')
+
+@login_required
+def logout(request):
+    auth_logout(request)
+    return render(request, 'users/logout.html')
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        userForm = UserUpdateForm(request.POST, instance=request.user)
+        profileForm = ProfileUpdateForm(request.POST,
+                                        request.FILES,
+                                        instance=request.user.profile)
+
+        if userForm.is_valid() and profileForm.is_valid():
+            userForm.save()
+            profileForm.save()
+            messages.success(request, "Your account has been updated!")
+            return redirect('profile')
+    else:
+        userForm = UserUpdateForm(instance=request.user)
+        profileForm = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'userForm': userForm,
+        'profileForm': profileForm
+    }
+
+    return render(request, 'users/profile.html', context)
