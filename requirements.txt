@@ -13,7 +13,7 @@ ion-oauth==0.1
 mongoengine==0.20.0
 oauth2-provider==0.0
 oauthlib==3.1.0
-Pillow==7.1.2
+Pillow==8.3.2
 pkg-resources==0.0.0
 pycparser==2.20
 PyJWT==1.7.1
